@@ -25,7 +25,7 @@ fh.close()
 G = nx.read_edgelist("cables_429.txt", nodetype=int, data=(("weight", float),))
 #print(list(G))
 '''
-f = open("bus_1138.txt", "r") # will change this later to as for user input or something of the like change it to get code
+f = open("example_diff_paths.txt", "r") # will change this later to as for user input or something of the like change it to get code
 fh = open("test.edgelist", "w+")
 lines = f.readlines()
 lines = [s.strip('\n') for s in lines]
@@ -35,7 +35,7 @@ y = len(lines)
 num = []
 l = 0
 for i in lines: #this code needs to be fixed so that it can chose between tabs and spaces
-    temp = lines[l].split("\t", 2)
+    temp = lines[l].replace("\t", " ")
     num.append(temp.split(" ", 2))
     if len(num[l]) != 2:
         num[l].pop(0)
@@ -45,11 +45,9 @@ for i in lines: #this code needs to be fixed so that it can chose between tabs a
     fh.write("\n")
     l = l+1
 
-array = np.array(num)
-content = str(array)
 fh.close()
-fh = open("test.edgelist", "r")
-G = nx.read_edgelist("test.edgelist",create_using = nx.Graph() ,nodetype=int ) #always stays as test.edgelist because thats what the code above writes into
+fh = open("test.edgelist", "rb")
+G = nx.read_edgelist(fh,create_using = nx.Graph() ,nodetype=int ) #always stays as test.edgelist because thats what the code above writes into
 nx.draw(G)
 plt.show()
 #print(num)
