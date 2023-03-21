@@ -1,9 +1,7 @@
 import networkx as nx
 import numpy as np
+import pygraphviz as pgv
 import matplotlib.pyplot as plt
-
-
-
 
 #Below is me testing out how to make all the different kinds of edgelists uniform and useable
 '''
@@ -25,6 +23,7 @@ fh.close()
 G = nx.read_edgelist("cables_429.txt", nodetype=int, data=(("weight", float),))
 #print(list(G))
 '''
+
 f = open("example_diff_paths.txt", "r") # will change this later to as for user input or something of the like change it to get code
 fh = open("test.edgelist", "w+")
 lines = f.readlines()
@@ -47,9 +46,18 @@ for i in lines: #this code needs to be fixed so that it can chose between tabs a
 
 fh.close()
 fh = open("test.edgelist", "rb")
-G = nx.read_edgelist(fh,create_using = nx.Graph() ,nodetype=int ) #always stays as test.edgelist because thats what the code above writes into
-nx.draw(G)
+L = nx.read_edgelist(fh)
+G = nx.nx_agraph.pygraphviz_layout(L) #always stays as test.edgelist because thats what the code above writes into4
+Y = nx.from_dict_of_lists(G)
+pos = {n: (n,n) for n in G}
+nx.write_latex(L, "Figure_latex.tex",pos = pos, as_document=True)
+print(G)
+'''nx.draw(L)
 plt.show()
-#print(num)
+#print(num)'''
 fh.close()
 f.close()
+
+'''P = nx.all_shortest_paths(Y, source=1,target=26)
+length = dict(nx.all_pairs_shortest_path_length(G))
+path = dict(nx.all_pairs_shortest_path(G)) prob use this one because I can use cutoff length for each one'''
