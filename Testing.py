@@ -76,7 +76,6 @@ for i in range(1, k):
         if d_sq[q] == i and d_qt[q] == k - i:
             layers[i].add(q)
 #print(layers)
-
 for i in range(1, k):
     P_new = set()
     for path in nx.all_shortest_paths(L, source=s, target=p):
@@ -87,15 +86,11 @@ for i in range(1, k):
         pruned= set()
         for path in P_new:
             last_two = tuple(path[-2:])
-            if len(path) <3:
+            if all(last_two not in P for P in pruned):
                 pruned.add(tuple(path))
-            else:
-                if all(last_two not in P for P in pruned):
-                    pruned.add(tuple(path))
-                    
-                elif len(set(nx.neighbors(G, path[-3])).intersection(set(path[-2:]))) > 1:
-                    pruned = pruned - set([P for P in pruned if last_two in P])
-                    pruned.add(tuple(path))
+            elif len(set(nx.neighbors(L, path[-3])).intersection(set(path[-2:]))) > 1:
+                pruned = pruned - set([P for P in pruned if last_two in P])
+                pruned.add(tuple(path))
                     
         P= pruned
     else:
@@ -116,8 +111,6 @@ for u, v in L.edges():
 #print(P)
 '''length = dict(nx.all_pairs_shortest_path_length(G))
 path = dict(nx.all_pairs_shortest_path(G)) prob use this one because I can use cutoff length for each one up to line 8 in pseudo code
-
 '''
-nx.draw_networkx(L, pos= G)
-nx.draw_networkx(L, pos=G, edge_color=edge_colors)
+nx.draw_networkx(L, pos= G,edge_color=edge_colors)
 plt.show()
